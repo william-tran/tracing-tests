@@ -81,7 +81,12 @@ public class MultipleReferencesTest {
         root1.finish();
         Span root2 = tracer.buildSpan("test-multi-trace-root2").start();
         root2.finish();
-        Span root3 = tracer.buildSpan("test-multi-trace-root3").asChildOf(root1).asChildOf(root2).start();
+        Span root3 = tracer.buildSpan("test-multi-trace-root3").start();
         root3.finish();
+        tracer.buildSpan("test-multi-trace-join")
+            .asChildOf(root3)
+            .asChildOf(root1)
+            .asChildOf(root2)
+            .start().finish();
     }
 }
